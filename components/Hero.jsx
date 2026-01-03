@@ -3,12 +3,12 @@ import React from 'react'
 function Hero() {
   return (
     <>
-   <div className="relative mt-20 px-6 md:px-10 lg:px-16">
+   <div className="relative mt-20 px-6 md:px-10 lg:px-16 bg-white">
   {/* Hero container */}
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center min-h-[80vh]">
 
     {/* LEFT: Text Content */}
-    <div className="relative z-10 space-y-6 text-center lg:text-left">
+    <div className="relative  space-y-6 text-center lg:text-left">
       <span className="uppercase tracking-wider text-sm text-gray-200 lg:text-gray-400">
         Civic Engagement Platform
       </span>

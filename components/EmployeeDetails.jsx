@@ -26,7 +26,7 @@ const employees = [
 
 function EmployeeDetails() {
   return (
-    <section className="bg-slate-200 py-16 px-6">
+    <section className="bg-white py-16 px-6">
       <div className="max-w-7xl mx-auto text-center mb-12">
         <h2 className="text-3xl font-bold text-gray-800">
           Employee Details
@@ -37,7 +37,7 @@ function EmployeeDetails() {
         {employees.map((emp) => (
           <div
             key={emp.id}
-            className="bg-white rounded-xl shadow-md p-6 text-center
+            className="bg-slate-200 hover:bg-slate-100 rounded-xl shadow-md p-6 text-center
             transition-transform duration-300 hover:scale-105 hover:shadow-xl"
           >
             {/* Image */}
@@ -50,13 +50,13 @@ function EmployeeDetails() {
             </div>
 
             {/* Name */}
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            <h3 className="text-xl font-semibold text-blue-500 mb-2">
               {emp.name}
             </h3>
 
             {/* Current Complaints */}
             <p className="text-gray-600 text-sm mb-1">
-              Current Complaints:{" "}
+              Assigned Complaints: {" "}
               <span className="font-medium text-gray-800">
                 {emp.currentComplaints}
               </span>
