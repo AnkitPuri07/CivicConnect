@@ -39,7 +39,7 @@ function Hero() {
       <img
         src="/images/civic-hero.jpg"
         alt="Civic Connect"
-        className="w-full h-full object-cover rounded-2xl"
+        className="w-full h-full object-cover rounded-2xl transition-transform duration-300 hover:scale-105 hover:shadow-xl"
       />
     </div>
 
