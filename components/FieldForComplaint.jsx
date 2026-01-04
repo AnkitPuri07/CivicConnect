@@ -49,7 +49,7 @@ const complaintFields = [
 
 function FieldForComplaint() {
   return (
-    <section className="bg-white py-16 px-6">
+    <section className="bg-white py-16 px-6 ">
       <div className="max-w-7xl mx-auto text-center mb-12">
         <h2 className="text-3xl font-bold text-gray-800">
           Select Your Complaint Field

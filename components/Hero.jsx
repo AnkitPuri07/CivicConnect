@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 
 function Hero() {
@@ -24,9 +25,9 @@ function Hero() {
       </p>
 
       <div className="flex justify-center lg:justify-start gap-4">
-        <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        <a href="#FieldForComplaint" className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
           Get Started
-        </button>
+        </a>
 
         <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
           Learn More
