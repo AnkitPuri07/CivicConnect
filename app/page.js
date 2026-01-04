@@ -7,8 +7,10 @@ export default function Home() {
   return (
    <>
    <Hero/>
+   <section  id="FieldForComplaint">
+    <FieldForComplaint/>
+   </section>
    
-   <FieldForComplaint/>
 
    <EmployeeDetails/>
 
