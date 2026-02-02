@@ -71,7 +71,7 @@ export default function AboutPage() {
       {/* Footer */}
       <div className="mt-14 text-center text-sm text-gray-500">
         <p>
-          Built with ❤️ using Next.js & Java Spring Boot
+          Built using Next.js & Java Spring Boot
         </p>
       </div>
 

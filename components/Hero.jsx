@@ -10,7 +10,7 @@ function Hero() {
 
     {/* LEFT: Text Content */}
     <div className="relative  space-y-6 text-center lg:text-left">
-      <span className="uppercase tracking-wider text-sm text-gray-200 lg:text-gray-400">
+      <span className="uppercase tracking-wider text-sm text-slate-700 lg:text-gray-400">
         Civic Engagement Platform
       </span>
 
