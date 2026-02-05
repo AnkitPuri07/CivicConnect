@@ -6,7 +6,7 @@ import Hero from "@/components/Hero";
 export default function Home() {
   return (
    <>
-   {/*The css color definetly needs some changes so that is also main priority */}
+   {/*The css color definetly needs some changes so that is also main priority. We will continue when we get break from professional classes*/}
    <Hero/>
    <section  id="FieldForComplaint">
     <FieldForComplaint/>
