@@ -7,7 +7,7 @@ export default function Home() {
   return (
    <>
    {/*The css color definetly needs some changes so that is also main priority. We will continue when we get break from professional classes
-   Now I am just committing to maintain strak*/}
+   Now I am just committing to maintain streak, same again*/}
    <Hero/>
    <section  id="FieldForComplaint">
     <FieldForComplaint/>
