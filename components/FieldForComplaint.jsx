@@ -49,9 +49,9 @@ const complaintFields = [
 
 function FieldForComplaint() {
   return (
-    <section className="bg-white py-16 px-6 ">
+    <section className="py-16 px-6 ">
       <div className="max-w-7xl mx-auto text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-800">
+        <h2 className="text-3xl font-bold text-blue-500">
           Select Your Complaint Field
         </h2>
       </div>
@@ -60,7 +60,7 @@ function FieldForComplaint() {
         {complaintFields.map((field) => (
           <div
             key={field.id}
-            className="flex flex-col items-center text-center bg-slate-200 hover:bg-slate-100 rounded-xl
+            className="flex flex-col items-center text-center card rounded-xl
             hover:cursor-pointer shadow-md p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl"
           >
             <div className="mb-4">{field.icon}</div>

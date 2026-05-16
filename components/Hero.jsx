@@ -4,7 +4,7 @@ import React from 'react'
 function Hero() {
   return (
     <>
-   <div className="relative mt-20 px-6 md:px-10 lg:px-16 bg-white">
+   <div className="relative mt-20 px-6 md:px-10 lg:px-16">
   {/* Hero container */}
   <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center min-h-[80vh]">
 
@@ -14,7 +14,7 @@ function Hero() {
         Civic Engagement Platform
       </span>
 
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white lg:text-black">
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
         Connecting Citizens <br />
         <span className="text-blue-400 lg:text-blue-500">With Local Governance</span>
       </h1>

@@ -2,7 +2,7 @@ import { FaUser, FaMapMarkerAlt, FaClipboardList, FaPaperPlane } from "react-ico
 
 export default function ComplaintPage() {
   return (
-    <section className="min-h-screen bg-slate-50 pt-28 pb-16 px-4">
+    <section className="min-h-screen  pt-28 pb-16 px-4">
       <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10">
 
         {/* Left Info Panel */}

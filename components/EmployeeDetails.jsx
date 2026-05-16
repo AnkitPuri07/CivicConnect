@@ -26,19 +26,19 @@ const employees = [
 
 function EmployeeDetails() {
   return (
-    <section className="bg-white py-16 px-6">
+    <section className=" py-16 px-6">
       <div className="max-w-7xl mx-auto text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-800">
+        <h2 className="text-3xl font-bold text-blue-500">
           Employee Details
         </h2>
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 ">
         {employees.map((emp) => (
           <div
             key={emp.id}
-            className="bg-slate-200 hover:bg-slate-100 rounded-xl shadow-md p-6 text-center
-            transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+            className="card rounded-xl shadow-md p-6 text-center
+            transition-transform duration-300 hover:scale-105 hover:shadow-xl empComp"
           >
             {/* Image */}
             <div className="flex justify-center mb-4">

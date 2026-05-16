@@ -1,10 +1,10 @@
 import Link from "next/link";
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-blue-200 px-4">
+    <div className="min-h-screen flex items-center justify-center  px-4">
 
       {/* Card */}
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+      <div className="w-full card max-w-4xl rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
         {/* Left Section */}
         <div className="hidden md:flex flex-col justify-center bg-blue-600 text-white p-10">
