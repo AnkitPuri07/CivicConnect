@@ -1,5 +1,39 @@
+"use client";
+import { useState } from "react";
+import { registerUser } from "@/services/authService";
 import Link from "next/link";
 export default function RegisterPage() {
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const handleRegister = async (e) => {
+  e.preventDefault();
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const response = await registerUser({
+      name,
+      email,
+      phone,
+      password
+    });
+
+    console.log(response);
+    alert("Registration Successful");
+  } catch (error) {
+    console.error(error);
+    alert("Registration Failed");
+  }
+};
+
   return (
     <div className="min-h-screen flex items-center justify-center  px-4">
 
@@ -29,7 +63,7 @@ export default function RegisterPage() {
             Join Civic Connect today
           </p>
 
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleRegister}>
 
             {/* Full Name */}
             <div>
@@ -41,6 +75,10 @@ export default function RegisterPage() {
                 placeholder="Your full name"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg
                            focus:outline-none focus:ring-2 focus:ring-blue-500"
+                             value={name}
+                          onChange={(e) =>
+                              setName(e.target.value)
+                          }
               />
             </div>
 
@@ -54,6 +92,11 @@ export default function RegisterPage() {
                 placeholder="you@example.com"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg
                            focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                             value={email}
+                          onChange={(e) =>
+                              setEmail(e.target.value)
+                          }
               />
             </div>
 
@@ -67,6 +110,10 @@ export default function RegisterPage() {
                 placeholder="98XXXXXXXX"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg
                            focus:outline-none focus:ring-2 focus:ring-blue-500"
+                             value={phone}
+                          onChange={(e) =>
+                              setPhone(e.target.value)
+                          }
               />
             </div>
 
@@ -80,6 +127,11 @@ export default function RegisterPage() {
                 placeholder="Create a password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg
                            focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                             value={password}
+                          onChange={(e) =>
+                              setPassword(e.target.value)
+                          }
               />
             </div>
 
@@ -93,6 +145,11 @@ export default function RegisterPage() {
                 placeholder="Re-enter password"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg
                            focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                             value={confirmPassword}
+                          onChange={(e) =>
+                              setConfirmPassword(e.target.value)
+                          }
               />
             </div>
 

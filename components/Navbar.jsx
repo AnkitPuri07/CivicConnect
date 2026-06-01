@@ -13,9 +13,14 @@ export default function Navbar() {
 
     const savedTheme = localStorage.getItem("theme");
 
-    if (savedTheme === "dark") {
-      setTheme("dark");
-      document.documentElement.classList.add("dark");
+    if (savedTheme) {
+      setTheme(savedTheme);
+
+      if (savedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
   }, []);
 
@@ -35,14 +40,15 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-4/5 md:w-full lg:w-4/5 rounded-xl
-      bg-white/60 dark:bg-zinc-900/60
-      backdrop-blur-xl
-      border border-white/20 dark:border-zinc-700
-      shadow-lg">
+      <nav
+        className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-4/5 md:w-full lg:w-4/5 rounded-x       bg-white/60 dark:bg-zinc-900/60  backdrop-blur-xl border border-white/20 dark:border-zinc-700  shadow-lg"
+      >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-
-          <Link href="/" className="text-xl font-semibold text-blue-600">
+          
+          <Link
+            href="/"
+            className="text-xl font-semibold text-blue-600"
+          >
             CivicConnect
           </Link>
 
@@ -54,15 +60,17 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-
-            {mounted && (
-              <button
-                onClick={toggle}
-                className="px-4 py-2 rounded-md border dark:border-zinc-700"
-              >
-                {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
-              </button>
-            )}
+            
+            <button
+              onClick={toggle}
+              className="px-4 py-2 rounded-md border dark:border-zinc-700"
+            >
+              {!mounted
+                ? "Theme"
+                : theme === "dark"
+                ? "☀️ Light"
+                : "🌙 Dark"}
+            </button>
 
             <Link href="/login">Login</Link>
 
