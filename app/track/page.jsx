@@ -6,38 +6,34 @@ import { ComplaintCard } from "@/components/ComplaintCard";
 import { AuthRequiredState, EmptyState } from "@/components/ui/EmptyState";
 import { SkeletonGrid } from "@/components/ui/Skeleton";
 import { ErrorBanner } from "@/components/ui/ErrorBanner";
-import { useAuth } from "@/lib/auth-context"; 
+import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
 import axios from "axios";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export default function TrackPage() {
-  // Pull global auth states from your working provider context
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
-  
+  const { isAuthenticated, isLoading: authLoading, token } = useAuth();
+
   const [complaints, setComplaints] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // CRITICAL FIX: Only make routing or fetch decisions once the AuthContext has finished initializing
-    if (!authLoading) {
-      if (isAuthenticated) {
-        fetchComplaints();
-      } else {
-        setIsLoading(false);
-      }
+    if (authLoading) return;
+
+    if (isAuthenticated && token) {
+      fetchComplaints();
+    } else {
+      setIsLoading(false);
     }
-  }, [isAuthenticated, authLoading]); // Runs predictably whenever auth variables stabilize
+  }, [isAuthenticated, authLoading, token]);
 
   const fetchComplaints = async () => {
     setIsLoading(true);
     setError("");
 
     try {
-      const token = localStorage.getItem("jwt_token");
-
       const response = await axios.get(
         `${API}/api/users/complaints/my`,
         {
@@ -57,16 +53,21 @@ export default function TrackPage() {
   };
 
   const handleUpdateComplaint = (updatedComplaint) => {
-    setComplaints((prev) =>
-      prev.map((c) => (c.id === updatedComplaint.id ? updatedComplaint : c))
-    );
-  };
+  setComplaints((prev) =>
+    prev.map((c) =>
+      c.complaintId === updatedComplaint.complaintId
+        ? updatedComplaint
+        : c
+    )
+  );
+};
 
-  const handleDeleteComplaint = (id) => {
-    setComplaints((prev) => prev.filter((c) => c.id !== id));
-  };
+ const handleDeleteComplaint = (id) => {
+  setComplaints((prev) =>
+    prev.filter((c) => c.complaintId !== id)
+  );
+};
 
-  // STEP 1: While AuthContext is reading localStorage, display the loaders
   if (authLoading) {
     return (
       <div className="min-h-screen pt-28 pb-16 px-4">
@@ -77,7 +78,6 @@ export default function TrackPage() {
     );
   }
 
-  // STEP 2: Only show the "Sign In Required" UI if auth is completely finished AND user is definitely unauthenticated
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen pt-28 pb-16 px-4">
@@ -86,11 +86,11 @@ export default function TrackPage() {
     );
   }
 
-  // STEP 3: Render dashboard design directly if authenticated
   return (
     <div className="min-h-screen pt-28 pb-16 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Page Header */}
+
+        {/* Header (UNCHANGED) */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,15 +105,15 @@ export default function TrackPage() {
           </p>
         </motion.div>
 
-        {/* Error Banner */}
+        {/* Error (UNCHANGED UI) */}
         <AnimatePresence>
           {error && <ErrorBanner message={error} onRetry={fetchComplaints} />}
         </AnimatePresence>
 
-        {/* Loading State */}
+        {/* Loading (UNCHANGED UI) */}
         {isLoading && <SkeletonGrid count={3} />}
 
-        {/* STATE 2: Authenticated User with Zero Complaints */}
+        {/* Empty State (UNCHANGED UI) */}
         <AnimatePresence mode="wait">
           {!isLoading && complaints.length === 0 && (
             <motion.div
@@ -132,7 +132,7 @@ export default function TrackPage() {
           )}
         </AnimatePresence>
 
-        {/* STATE 3: Authenticated User with Complaints */}
+        {/* Complaint Grid (UNCHANGED UI) */}
         <AnimatePresence>
           {!isLoading && complaints.length > 0 && (
             <motion.div
@@ -142,12 +142,11 @@ export default function TrackPage() {
             >
               <div className="flex justify-between items-center mb-6">
                 <p className="text-sm text-slate-500 dark:text-zinc-400">
-                  {complaints.length} {complaints.length === 1 ? "complaint" : "complaints"} found
+                  {complaints.length}{" "}
+                  {complaints.length === 1 ? "complaint" : "complaints"} found
                 </p>
-                <Link
-                  href="/complaintPage"
-                  className="btn-primary text-sm py-2 px-4"
-                >
+
+                <Link href="/complaintPage" className="btn-primary text-sm py-2 px-4">
                   + New Complaint
                 </Link>
               </div>
@@ -156,7 +155,7 @@ export default function TrackPage() {
                 <AnimatePresence mode="popLayout">
                   {complaints.map((complaint, index) => (
                     <motion.div
-                      key={complaint.id}
+                      key={complaint.complaintId}
                       layout
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -175,6 +174,7 @@ export default function TrackPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
       </div>
     </div>
   );

@@ -29,12 +29,12 @@ export function ComplaintCard({ complaint, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [editData, setEditData] = useState({
-    title: complaint.title,
-    description: complaint.description,
-    category: complaint.category,
-    location: complaint.location,
-  });
+    const [editData, setEditData] = useState({
+      title: complaint.complaintTitle || "",
+      description: complaint.complaintDescription || "",
+      category: complaint.complaintCategory || "",
+      location: complaint.complaintLocation || "",
+    });
   const toast = useToast();
 
   const handleSave = async () => {
@@ -62,7 +62,7 @@ export function ComplaintCard({ complaint, onUpdate, onDelete }) {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       toast.success("Complaint deleted");
-      onDelete(complaint.id);
+    onDelete(complaint.complaintId);
       setShowDeleteModal(false);
     } catch (err) {
       toast.error("Failed to delete complaint");
@@ -71,12 +71,13 @@ export function ComplaintCard({ complaint, onUpdate, onDelete }) {
     }
   };
 
-  const formattedDate = new Date(complaint.created_at).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
+  const formattedDate = complaint.createdAt
+  ? new Date(complaint.createdAt).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+  : "Unknown Date";
   return (
     <>
       <AnimatePresence mode="wait">
@@ -189,36 +190,33 @@ export function ComplaintCard({ complaint, onUpdate, onDelete }) {
               <div className="flex flex-wrap justify-between items-start gap-3 mb-4">
                 <div className="flex-1 min-w-0">
                   <h3 className="text-lg font-semibold text-slate-800 dark:text-white truncate">
-                    {complaint.title}
+                   {complaint.complaintTitle}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-zinc-400 font-mono">
-                    {complaint.tracking_id}
-                  </p>
                 </div>
-                <span className={`status-badge status-${complaint.status}`}>
-                  {statusLabels[complaint.status] || complaint.status}
-                </span>
+                <span className={`status-badge status-${complaint.complaintStatus?.toLowerCase()}`}>
+                  {statusLabels[complaint.complaintStatus?.toLowerCase()] ||
+                   complaint.complaintStatus}
+              </span>
               </div>
 
               {/* Body */}
               <div className="space-y-3 mb-4">
                 {/* Category Tag */}
                 <span className="inline-block text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300">
-                  {categoryLabels[complaint.category] || complaint.category}
+                  {categoryLabels[complaint.complaintCategory] || complaint.complaintCategory}
                 </span>
 
                 {/* Description */}
                 <p className="text-sm text-slate-600 dark:text-zinc-300 line-clamp-3">
-                  {complaint.description || "No description provided"}
-                </p>
+                {complaint.complaintDescription || "No description provided"}                </p>
 
                 {/* Location */}
-                {complaint.location && (
-                  <p className="text-xs text-slate-500 dark:text-zinc-500 flex items-center gap-1">
-                    <span>📍</span>
-                    {complaint.location}
-                  </p>
-                )}
+                {complaint.complaintLocation && (
+                        <p className="text-xs text-slate-500 dark:text-zinc-500 flex items-center gap-1">
+                      <span>📍</span>
+                        {complaint.complaintLocation}
+                           </p>
+                        )}
 
                 {/* Date */}
                 <p className="text-xs text-slate-400 dark:text-zinc-500">
