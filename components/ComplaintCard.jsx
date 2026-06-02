@@ -261,4 +261,3 @@ export function ComplaintCard({ complaint, onUpdate, onDelete }) {
 }
 
 
-export { ComplaintCard }

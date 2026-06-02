@@ -4,7 +4,6 @@ import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/ui/Toast";
 import { FaUser, FaMapMarkerAlt, FaClipboardList, FaPaperPlane } from "react-icons/fa";
 import axios from "axios";
@@ -28,7 +27,8 @@ const categories = [
 function ComplaintForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+ const [isAuthenticated, setIsAuthenticated] = useState(false);
+const [authLoading, setAuthLoading] = useState(true);
   const toast = useToast();
 
   const [formData, setFormData] = useState({
@@ -41,18 +41,30 @@ function ComplaintForm() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+  const token = localStorage.getItem("jwt_token");
+
+  if (token) {
+    setIsAuthenticated(true);
+  } else {
+    setIsAuthenticated(false);
+  }
+
+  setAuthLoading(false);
+}, []);
+
+  useEffect(() => {
     const cat = searchParams.get("category");
     if (cat && categories.find((c) => c.value === cat)) {
       setFormData((prev) => ({ ...prev, category: cat }));
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      toast.warning("Please sign in to file a complaint");
-      router.push("/login");
-    }
-  }, [authLoading, isAuthenticated, router, toast]);
+ useEffect(() => {
+  if (!authLoading && !isAuthenticated) {
+    toast.warning("Please sign in to file a complaint");
+    router.replace("/login");
+  }
+}, [authLoading, isAuthenticated, router, toast]);
 
   const validate = () => {
     const newErrors = {};
@@ -79,19 +91,20 @@ function ComplaintForm() {
 
     try {
       const token = localStorage.getItem("jwt_token");
-      const response = await axios.post(
-        `${API}/api/complaints`,
-        {
-          title: formData.title,
-          location: formData.location,
-          category: formData.category,
-          description: formData.description,
-        },
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
-      );
-
+          const response = await axios.post(
+          `${API}/api/users/complaints`,
+          {
+            complaintTitle: formData.title,
+            complaintDescription: formData.description,
+           complaintLocation: formData.location,
+            complaintCategory: formData.category,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       toast.success("Complaint submitted successfully!");
       setFormData({ title: "", location: "", category: "other", description: "" });
       router.push("/track");

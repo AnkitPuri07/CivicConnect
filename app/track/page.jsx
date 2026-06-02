@@ -2,62 +2,55 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/lib/auth-context";
 import { ComplaintCard } from "@/components/ComplaintCard";
 import { AuthRequiredState, EmptyState } from "@/components/ui/EmptyState";
 import { SkeletonGrid } from "@/components/ui/Skeleton";
 import { ErrorBanner } from "@/components/ui/ErrorBanner";
+import { useAuth } from "@/lib/auth-context"; 
 import Link from "next/link";
+import axios from "axios";
 
-// Mock data for demo - in production this would come from Spring Boot backend
-const mockComplaints = [
-  {
-    id: "1",
-    tracking_id: "CC-2024-0001",
-    title: "Pothole on Main Street",
-    description: "Large pothole causing traffic issues near the intersection of Main and Oak Street.",
-    category: "road",
-    location: "Main Street & Oak Avenue",
-    status: "pending",
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    tracking_id: "CC-2024-0002",
-    title: "Broken Street Light",
-    description: "Street light has been out for over a week on Pine Road.",
-    category: "electricity",
-    location: "Pine Road, Block 12",
-    status: "in_progress",
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-  },
-];
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export default function TrackPage() {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  // Pull global auth states from your working provider context
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  
   const [complaints, setComplaints] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchComplaints();
-    } else if (!authLoading && !isAuthenticated) {
-      setIsLoading(false);
+    // CRITICAL FIX: Only make routing or fetch decisions once the AuthContext has finished initializing
+    if (!authLoading) {
+      if (isAuthenticated) {
+        fetchComplaints();
+      } else {
+        setIsLoading(false);
+      }
     }
-  }, [isAuthenticated, authLoading]);
+  }, [isAuthenticated, authLoading]); // Runs predictably whenever auth variables stabilize
 
-  // In production, this would fetch from Spring Boot backend
   const fetchComplaints = async () => {
     setIsLoading(true);
     setError("");
+
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      // Use mock data for now
-      setComplaints(mockComplaints);
+      const token = localStorage.getItem("jwt_token");
+
+      const response = await axios.get(
+        `${API}/api/users/complaints/my`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setComplaints(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
-      setError("Failed to load your complaints. Please try again.");
+      console.error("Backend fetch error:", err);
+      setError("Failed to load complaints");
     } finally {
       setIsLoading(false);
     }
@@ -73,16 +66,7 @@ export default function TrackPage() {
     setComplaints((prev) => prev.filter((c) => c.id !== id));
   };
 
-  // STATE 1: Unauthenticated User
-  if (!authLoading && !isAuthenticated) {
-    return (
-      <div className="min-h-screen pt-28 pb-16 px-4">
-        <AuthRequiredState />
-      </div>
-    );
-  }
-
-  // Loading state for auth check
+  // STEP 1: While AuthContext is reading localStorage, display the loaders
   if (authLoading) {
     return (
       <div className="min-h-screen pt-28 pb-16 px-4">
@@ -93,6 +77,16 @@ export default function TrackPage() {
     );
   }
 
+  // STEP 2: Only show the "Sign In Required" UI if auth is completely finished AND user is definitely unauthenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen pt-28 pb-16 px-4">
+        <AuthRequiredState />
+      </div>
+    );
+  }
+
+  // STEP 3: Render dashboard design directly if authenticated
   return (
     <div className="min-h-screen pt-28 pb-16 px-4">
       <div className="max-w-7xl mx-auto">
