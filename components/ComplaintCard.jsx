@@ -1,5 +1,7 @@
 "use client";
 
+import axios from "axios";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/components/ui/Toast";
@@ -38,39 +40,74 @@ export function ComplaintCard({ complaint, onUpdate, onDelete }) {
   const toast = useToast();
 
   const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      // In production, this would call Spring Boot backend
-      // Simulating API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+  setIsSaving(true);
 
-      toast.success("Complaint updated successfully");
-      onUpdate({ ...complaint, ...editData });
-      setIsEditing(false);
-    } catch (err) {
-      toast.error("Failed to update complaint");
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  try {
+    const token = localStorage.getItem("jwt_token");
 
-  const handleDelete = async () => {
-    setIsSaving(true);
-    try {
-      // In production, this would call Spring Boot backend
-      // Simulating API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+    const response = await axios.put(
+      `${API}/api/users/complaints/${complaint.complaintId}`,
+      {
+        complaintTitle: editData.title,
+        complaintDescription: editData.description,
+        complaintCategory: editData.category,
+        complaintLocation: editData.location,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      toast.success("Complaint deleted");
+    toast.success("Complaint updated successfully");
+
+    onUpdate(response.data);
+
+    setIsEditing(false);
+  } catch (err) {
+    console.error(err);
+
+    toast.error(
+      err.response?.data?.message ||
+      "Failed to update complaint"
+    );
+  } finally {
+    setIsSaving(false);
+  }
+};
+
+const handleDelete = async () => {
+  setIsSaving(true);
+
+  try {
+    const token = localStorage.getItem("jwt_token");
+
+    await axios.delete(
+      `${API}/api/users/complaints/${complaint.complaintId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    toast.success("Complaint deleted");
+
     onDelete(complaint.complaintId);
-      setShowDeleteModal(false);
-    } catch (err) {
-      toast.error("Failed to delete complaint");
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
+    setShowDeleteModal(false);
+  } catch (err) {
+    console.error(err);
+
+    toast.error(
+      err.response?.data?.message ||
+      "Failed to delete complaint"
+    );
+  } finally {
+    setIsSaving(false);
+  }
+};
   const formattedDate = complaint.createdAt
   ? new Date(complaint.createdAt).toLocaleDateString("en-US", {
       year: "numeric",
