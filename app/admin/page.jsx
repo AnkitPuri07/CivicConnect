@@ -52,6 +52,7 @@ export default function AdminPage() {
           },
         }
       );
+      console.log("Complaints API Response:", response.data);
 
       setComplaints(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
@@ -82,21 +83,24 @@ export default function AdminPage() {
     }
   };
 
-  const handleStatusUpdate = (complaintId, newStatus) => {
-    setComplaints((prev) =>
-      prev.map((c) =>
-        c.id === complaintId ? { ...c, complaintStatus: newStatus } : c
-      )
-    );
-  };
-
-  const handleStaffAssign = (complaintId, staffId) => {
-    setComplaints((prev) =>
-      prev.map((c) =>
-        c.id === complaintId ? { ...c, assignedStaffId: staffId } : c
-      )
-    );
-  };
+ handleStatusUpdate = (complaintId, newStatus) => {
+  setComplaints((prev) =>
+    prev.map((c) =>
+      c.complaintId === complaintId
+        ? { ...c, complaintStatus: newStatus }
+        : c
+    )
+  );
+};
+handleStaffAssign = (complaintId, staffId) => {
+  setComplaints((prev) =>
+    prev.map((c) =>
+      c.complaintId === complaintId
+        ? { ...c, assignedStaffId: staffId }
+        : c
+    )
+  );
+};
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
@@ -187,7 +191,7 @@ export default function AdminPage() {
               <AnimatePresence mode="popLayout">
                 {complaints.map((complaint, index) => (
                   <motion.div
-                    key={complaint.id}
+                    key={complaint.complaintId}
                     layout
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
