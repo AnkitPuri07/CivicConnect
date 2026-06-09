@@ -34,7 +34,7 @@ export function AdminComplaintCard({
 
     try {
       await axios.put(
-        `${API}/api/admin/complaints/${complaint.id}/status?status=${selectedStatus}`,
+        `${API}/api/admin/complaints/${complaint.complaintId}/status?status=${selectedStatus}`,
         {},
         {
           headers: {
@@ -44,7 +44,7 @@ export function AdminComplaintCard({
       );
 
       setSuccess("Status updated successfully");
-      onStatusUpdate(complaint.id, selectedStatus);
+      onStatusUpdate(complaint.complaintId, selectedStatus);
 
       setTimeout(() => setSuccess(""), 2000);
     } catch (err) {
@@ -67,7 +67,7 @@ export function AdminComplaintCard({
 
     try {
       await axios.put(
-        `${API}/api/admin/complaints/${complaint.id}/assign/${selectedStaff}`,
+        `${API}/api/admin/complaints/${complaint.complaintId}/assign/${selectedStaff}`,
         {},
         {
           headers: {
@@ -77,7 +77,7 @@ export function AdminComplaintCard({
       );
 
       setSuccess("Staff assigned successfully");
-      onStaffAssign(complaint.id, selectedStaff);
+      onStaffAssign(complaint.complaintId, selectedStaff);
       setSelectedStaff("");
 
       setTimeout(() => setSuccess(""), 2000);
