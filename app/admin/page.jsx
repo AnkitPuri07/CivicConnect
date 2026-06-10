@@ -83,7 +83,7 @@ export default function AdminPage() {
     }
   };
 
- handleStatusUpdate = (complaintId, newStatus) => {
+const handleStatusUpdate = (complaintId, newStatus) => {
   setComplaints((prev) =>
     prev.map((c) =>
       c.complaintId === complaintId
@@ -92,7 +92,8 @@ export default function AdminPage() {
     )
   );
 };
-handleStaffAssign = (complaintId, staffId) => {
+
+const handleStaffAssign = (complaintId, staffId) => {
   setComplaints((prev) =>
     prev.map((c) =>
       c.complaintId === complaintId
