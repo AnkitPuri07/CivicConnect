@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
@@ -23,23 +23,9 @@ export default function AdminPage() {
 
   const adminToken = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
 
-  useEffect(() => {
-    if (!adminToken) {
-      router.push("/admin/login");
-      return;
-    }
-
-    fetchComplaints();
-    fetchStaff();
-  }, [adminToken, router]);
-
-  useEffect(() => {
-    if (adminToken && selectedStatus) {
-      fetchComplaints();
-    }
-  }, [selectedStatus, adminToken]);
-
-  const fetchComplaints = async () => {
+  // Wrapped in useCallback to prevent redeclaration on every render pass
+  const fetchComplaints = useCallback(async () => {
+    if (!adminToken) return;
     setIsLoadingComplaints(true);
     setError("");
 
@@ -52,8 +38,6 @@ export default function AdminPage() {
           },
         }
       );
-      console.log("Complaints API Response:", response.data);
-
       setComplaints(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       setError("Failed to load complaints. Please try again.");
@@ -62,9 +46,10 @@ export default function AdminPage() {
     } finally {
       setIsLoadingComplaints(false);
     }
-  };
+  }, [selectedStatus, adminToken]);
 
-  const fetchStaff = async () => {
+  const fetchStaff = useCallback(async () => {
+    if (!adminToken) return;
     setIsLoadingStaff(true);
 
     try {
@@ -73,7 +58,6 @@ export default function AdminPage() {
           Authorization: `Bearer ${adminToken}`,
         },
       });
-
       setStaffList(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       console.error("Fetch staff error:", err);
@@ -81,30 +65,47 @@ export default function AdminPage() {
     } finally {
       setIsLoadingStaff(false);
     }
+  }, [adminToken]);
+
+  // Combined Lifecycle Synchronization Hook
+  useEffect(() => {
+    if (!adminToken) {
+      router.push("/admin/login");
+      return;
+    }
+
+    fetchComplaints();
+    
+    // Only fetch staff array once on component mount
+    if (staffList.length === 0 && isLoadingStaff) {
+      fetchStaff();
+    }
+  }, [adminToken, selectedStatus, router, fetchComplaints, fetchStaff, staffList.length, isLoadingStaff]);
+
+  const handleStatusUpdate = (complaintId, newStatus) => {
+    setComplaints((prev) =>
+      prev.map((c) =>
+        c.complaintId === complaintId
+          ? { ...c, complaintStatus: newStatus }
+          : c
+      )
+    );
   };
 
-const handleStatusUpdate = (complaintId, newStatus) => {
-  setComplaints((prev) =>
-    prev.map((c) =>
-      c.complaintId === complaintId
-        ? { ...c, complaintStatus: newStatus }
-        : c
-    )
-  );
-};
-
-const handleStaffAssign = (complaintId, staffId) => {
-  setComplaints((prev) =>
-    prev.map((c) =>
-      c.complaintId === complaintId
-        ? { ...c, assignedStaffId: staffId }
-        : c
-    )
-  );
-};
+  const handleStaffAssign = (complaintId, staffId) => {
+    setComplaints((prev) =>
+      prev.map((c) =>
+        c.complaintId === complaintId
+          ? { ...c, assignedStaffId: staffId }
+          : c
+      )
+    );
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
+    // Wipe auth headers clean upon exit
+    delete axios.defaults.headers.common["Authorization"];
     router.push("/");
   };
 
@@ -115,7 +116,7 @@ const handleStaffAssign = (complaintId, staffId) => {
   return (
     <div className="min-h-screen pt-28 pb-16 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Dashboard Header Layout */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -131,22 +132,22 @@ const handleStaffAssign = (complaintId, staffId) => {
             </p>
           </div>
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleLogout}
-            className="btn-secondary flex items-center gap-2"
+            className="btn-secondary flex items-center gap-2 py-2.5"
           >
             <FiLogOut size={18} />
             Logout
           </motion.button>
         </motion.div>
 
-        {/* Error Banner */}
+        {/* Global Error Notice Overlay */}
         <AnimatePresence>
           {error && <ErrorBanner message={error} onRetry={fetchComplaints} />}
         </AnimatePresence>
 
-        {/* Status Filter */}
+        {/* Unified Custom Select Filter Input */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -168,7 +169,7 @@ const handleStaffAssign = (complaintId, staffId) => {
           </select>
         </motion.div>
 
-        {/* Complaints Section */}
+        {/* Complaints Grid Area */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -212,7 +213,7 @@ const handleStaffAssign = (complaintId, staffId) => {
           )}
         </motion.div>
 
-        {/* Staff Section */}
+        {/* Staff Management Roster Layout */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

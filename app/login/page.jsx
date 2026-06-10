@@ -57,6 +57,7 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="w-full card max-w-4xl rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2"
       >
+        {/* Left Informational Banner (Visible on Desktop) */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -83,6 +84,7 @@ export default function LoginPage() {
           </ul>
         </motion.div>
 
+        {/* Right Form Container */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -105,6 +107,7 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email Input */}
             <div>
               <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">
                 Email Address
@@ -115,9 +118,11 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
-                className="w-full px-4 py-2.5 border border-slate-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
+                className="input-field"
               />
             </div>
+
+            {/* Password Input */}
             <div>
               <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">
                 Password
@@ -128,24 +133,28 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
-                className="w-full px-4 py-2.5 border border-slate-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
+                className="input-field"
               />
             </div>
+
+            {/* Remember Me & Forgot Password Utilities */}
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-slate-600 dark:text-zinc-400">
+              <label className="flex items-center gap-2 text-slate-600 dark:text-zinc-400 cursor-pointer">
                 <input type="checkbox" className="accent-blue-600 rounded" />
                 Remember me
               </label>
-              <Link href="#" className="text-blue-600 hover:underline">
+              <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline">
                 Forgot password?
               </Link>
             </div>
+
+            {/* Submit Action Button */}
             <motion.button
               type="submit"
               disabled={isLoading}
               whileHover={{ scale: isLoading ? 1 : 1.01 }}
               whileTap={{ scale: isLoading ? 1 : 0.99 }}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              className="btn-primary w-full py-3"
             >
               {isLoading ? (
                 <>
@@ -156,14 +165,18 @@ export default function LoginPage() {
                 "Sign In"
               )}
             </motion.button>
+
+            {/* Section Divider */}
             <div className="flex items-center gap-3">
               <hr className="flex-grow border-slate-200 dark:border-zinc-700" />
               <span className="text-slate-400 text-sm">or</span>
               <hr className="flex-grow border-slate-200 dark:border-zinc-700" />
             </div>
+
+            {/* Registration Callout Link */}
             <p className="text-center text-sm text-slate-600 dark:text-zinc-400">
               Don't have an account?{" "}
-              <Link href="/register" className="text-blue-600 font-medium hover:underline">
+              <Link href="/register" className="text-blue-600 dark:text-blue-400 font-medium hover:underline">
                 Create one
               </Link>
             </p>

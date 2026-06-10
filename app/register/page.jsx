@@ -121,105 +121,140 @@ export default function RegisterPage() {
             </motion.div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">Full Name</label>
-              <input
-                type="text"
-                placeholder="Your full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={isLoading}
-                className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-zinc-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 ${fieldErrors.name ? 'border-red-500' : 'border-slate-300 dark:border-zinc-600'}`}
-              />
-              {fieldErrors.name && <p className="text-xs text-red-500 mt-1">{fieldErrors.name}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">Email Address</label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
-                className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-zinc-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 ${fieldErrors.email ? 'border-red-500' : 'border-slate-300 dark:border-zinc-600'}`}
-              />
-              {fieldErrors.email && <p className="text-xs text-red-500 mt-1">{fieldErrors.email}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">Phone Number</label>
-              <input
-                type="tel"
-                placeholder="98XXXXXXXX"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                disabled={isLoading}
-                className="w-full px-4 py-2.5 border border-slate-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">Password</label>
-              <input
-                type="password"
-                placeholder="Create a password (min 6 characters)"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
-                className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-zinc-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 ${fieldErrors.password ? 'border-red-500' : 'border-slate-300 dark:border-zinc-600'}`}
-              />
-              {fieldErrors.password && <p className="text-xs text-red-500 mt-1">{fieldErrors.password}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">Confirm Password</label>
-              <input
-                type="password"
-                placeholder="Re-enter password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={isLoading}
-                className={`w-full px-4 py-2.5 border rounded-lg bg-white dark:bg-zinc-800 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 ${fieldErrors.confirmPassword ? 'border-red-500' : 'border-slate-300 dark:border-zinc-600'}`}
-              />
-              {fieldErrors.confirmPassword && <p className="text-xs text-red-500 mt-1">{fieldErrors.confirmPassword}</p>}
-            </div>
-            <div className="flex items-start gap-2 text-sm text-slate-600 dark:text-zinc-400">
-              <input
-                type="checkbox"
-                checked={acceptTerms}
-                onChange={(e) => setAcceptTerms(e.target.checked)}
-                disabled={isLoading}
-                className="accent-blue-600 mt-1 rounded"
-              />
-              <p>
-                I agree to the{" "}
-                <Link href="#" className="text-blue-600 hover:underline">
-                  Terms & Conditions
-                </Link>
-                {fieldErrors.terms && <span className="text-red-500 block mt-1">{fieldErrors.terms}</span>}
-              </p>
-            </div>
-            <motion.button
-              type="submit"
-              disabled={isLoading}
-              whileHover={{ scale: isLoading ? 1 : 1.01 }}
-              whileTap={{ scale: isLoading ? 1 : 0.99 }}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
-            >
-              {isLoading ? (
-                <>
-                  <span className="animate-spin">⏳</span>
-                  Creating account...
-                </>
-              ) : (
-                "Create Account"
-              )}
-            </motion.button>
-            <p className="text-center text-sm text-slate-600 dark:text-zinc-400">
-              Already have an account?{" "}
-              <Link href="/login" className="text-blue-600 font-medium hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </form>
+     <form onSubmit={handleSubmit} className="space-y-4">
+  {/* Full Name Field */}
+  <div>
+    <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">
+      Full Name
+    </label>
+    <input
+      type="text"
+      placeholder="Your full name"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      disabled={isLoading}
+      className={`input-field ${fieldErrors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+    />
+    {fieldErrors.name && (
+      <p className="text-xs text-red-500 mt-1">{fieldErrors.name}</p>
+    )}
+  </div>
+
+  {/* Email Address Field */}
+  <div>
+    <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">
+      Email Address
+    </label>
+    <input
+      type="email"
+      placeholder="you@example.com"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      disabled={isLoading}
+      className={`input-field ${fieldErrors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+    />
+    {fieldErrors.email && (
+      <p className="text-xs text-red-500 mt-1">{fieldErrors.email}</p>
+    )}
+  </div>
+
+  {/* Phone Number Field */}
+  <div>
+    <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">
+      Phone Number
+    </label>
+    <input
+      type="tel"
+      placeholder="98XXXXXXXX"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+      disabled={isLoading}
+      className="input-field"
+    />
+  </div>
+
+  {/* Password Field */}
+  <div>
+    <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">
+      Password
+    </label>
+    <input
+      type="password"
+      placeholder="Create a password (min 6 characters)"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      disabled={isLoading}
+      className={`input-field ${fieldErrors.password ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+    />
+    {fieldErrors.password && (
+      <p className="text-xs text-red-500 mt-1">{fieldErrors.password}</p>
+    )}
+  </div>
+
+  {/* Confirm Password Field */}
+  <div>
+    <label className="block text-sm font-medium text-slate-600 dark:text-zinc-300 mb-1.5">
+      Confirm Password
+    </label>
+    <input
+      type="password"
+      placeholder="Re-enter password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      disabled={isLoading}
+      className={`input-field ${fieldErrors.confirmPassword ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+    />
+    {fieldErrors.confirmPassword && (
+      <p className="text-xs text-red-500 mt-1">{fieldErrors.confirmPassword}</p>
+    )}
+  </div>
+
+  {/* Terms & Conditions Checkbox */}
+  <div className="flex items-start gap-2 text-sm text-slate-600 dark:text-zinc-400">
+    <input
+      type="checkbox"
+      checked={acceptTerms}
+      onChange={(e) => setAcceptTerms(e.target.checked)}
+      disabled={isLoading}
+      className="accent-blue-600 mt-1 rounded cursor-pointer"
+    />
+    <div>
+      I agree to the{" "}
+      <Link href="#" className="text-blue-600 dark:text-blue-400 hover:underline">
+        Terms & Conditions
+      </Link>
+      {fieldErrors.terms && (
+        <span className="text-red-500 block mt-1">{fieldErrors.terms}</span>
+      )}
+    </div>
+  </div>
+
+  {/* Form Submit Button */}
+  <motion.button
+    type="submit"
+    disabled={isLoading}
+    whileHover={{ scale: isLoading ? 1 : 1.01 }}
+    whileTap={{ scale: isLoading ? 1 : 0.99 }}
+    className="btn-primary w-full py-3"
+  >
+    {isLoading ? (
+      <>
+        <span className="animate-spin">⏳</span>
+        Creating account...
+      </>
+    ) : (
+      "Create Account"
+    )}
+  </motion.button>
+
+  {/* Navigation Link */}
+  <p className="text-center text-sm text-slate-600 dark:text-zinc-400">
+    Already have an account?{" "}
+    <Link href="/login" className="text-blue-600 dark:text-blue-400 font-medium hover:underline">
+      Sign in
+    </Link>
+  </p>
+</form>
         </motion.div>
       </motion.div>
     </div>

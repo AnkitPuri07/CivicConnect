@@ -30,6 +30,7 @@ export default function AdminLoginPage() {
 
       if (response.data.token) {
         localStorage.setItem("admin_token", response.data.token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
         router.push("/admin");
       }
     } catch (err) {
@@ -49,6 +50,7 @@ export default function AdminLoginPage() {
         className="w-full max-w-md"
       >
         <div className="card p-8">
+          {/* Header */}
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
               Admin Login
@@ -58,6 +60,7 @@ export default function AdminLoginPage() {
             </p>
           </div>
 
+          {/* Error Container */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -69,63 +72,80 @@ export default function AdminLoginPage() {
             </motion.div>
           )}
 
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email Field */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">
                 Email
               </label>
-              <div className="relative">
-                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
+              <div className="relative flex items-center">
+                <FiMail className="absolute left-3.5 text-slate-400 dark:text-zinc-500 pointer-events-none" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@example.com"
-                  className="input-field pl-10"
+                  className="input-field pl-11"
+                  disabled={isLoading}
                   required
+                  autoComplete="email"
                 />
               </div>
             </div>
 
+            {/* Password Field */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">
                 Password
               </label>
-              <div className="relative">
-                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" />
+              <div className="relative flex items-center">
+                <FiLock className="absolute left-3.5 text-slate-400 dark:text-zinc-500 pointer-events-none" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="input-field pl-10 pr-10"
+                  className="input-field pl-11 pr-11"
+                  disabled={isLoading}
                   required
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-400"
+                  className="absolute right-3.5 text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-zinc-400 focus:outline-none"
+                  tabIndex={-1}
                 >
                   {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                 </button>
               </div>
             </div>
 
+            {/* Submit Button */}
             <motion.button
               type="submit"
               disabled={isLoading}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="btn-primary w-full mt-6"
+              whileHover={{ scale: isLoading ? 1 : 1.01 }}
+              whileTap={{ scale: isLoading ? 1 : 0.99 }}
+              className="btn-primary w-full mt-2 py-3"
             >
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <span className="animate-spin">⏳</span>
+                  Signing in...
+                </div>
+              ) : (
+                "Sign In"
+              )}
             </motion.button>
           </form>
 
+          {/* Footer Back Link */}
           <div className="mt-6 pt-6 border-t border-slate-200 dark:border-zinc-700 text-center">
             <p className="text-sm text-slate-600 dark:text-zinc-400">
               Back to{" "}
-              <Link href="/" className="text-blue-600 dark:text-blue-400 hover:underline">
+              <Link href="/" className="text-blue-600 dark:text-blue-400 font-medium hover:underline">
                 Home
               </Link>
             </p>
