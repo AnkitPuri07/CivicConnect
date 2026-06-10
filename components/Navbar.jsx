@@ -39,7 +39,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-lg" : "bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md"} border-b border-slate-200/50 dark:border-zinc-800/50`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors">CivicConnect</Link>
-        <div className="hidden md:flex items-center gap-8 text-slate-600 dark:text-zinc-300">
+        <div className="hidden md:flex items-center gap-8 text-slate-600 dark:text-slate-200">
           <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Home</Link>
           <Link href="/complaintPage" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Complaints</Link>
           <Link href="/track" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Track Status</Link>
@@ -58,7 +58,7 @@ export default function Navbar() {
             </div>
           ) : (
             <>
-              <Link href="/login" className="text-slate-600 dark:text-zinc-300 hover:text-blue-600 transition-colors font-medium">Login</Link>
+              <Link href="/login" className="text-slate-600 dark:text-slate-200 hover:text-blue-600 transition-colors font-medium">Login</Link>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link href="/register" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-block">Register</Link>
               </motion.div>

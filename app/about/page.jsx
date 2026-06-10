@@ -25,10 +25,9 @@ export default function AboutPage() {
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }} className="card p-8 md:col-span-2">
           <h2 className="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-6 text-center">Developers</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-            <motion.div whileHover={{ scale: 1.02 }} className="border rounded-xl p-5 dark:border-zinc-700"><p className="font-semibold text-slate-800 dark:text-white mb-1">Ankit Puri</p><p className="text-sm text-slate-500 dark:text-zinc-400">Frontend & Integration</p></motion.div>
-            <motion.div whileHover={{ scale: 1.02 }} className="border rounded-xl p-5 dark:border-zinc-700"><p className="font-semibold text-slate-800 dark:text-white mb-1">Sahaj Khadka</p><p className="text-sm text-slate-500 dark:text-zinc-400">Backend & API Development</p></motion.div>
-            <motion.div whileHover={{ scale: 1.02 }} className="border rounded-xl p-5 dark:border-zinc-700"><p className="font-semibold text-slate-800 dark:text-white mb-1">Aashish Thapa Magar</p><p className="text-sm text-slate-500 dark:text-zinc-400">Database & System Design</p></motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+            <motion.div whileHover={{ scale: 1.02 }} className="border rounded-xl p-5 dark:border-zinc-700"><p className="font-semibold text-slate-800 dark:text-white mb-1">Sahaj Khadka</p><p className="text-sm text-slate-500 dark:text-zinc-400">Frontend & Integration</p></motion.div>
+            <motion.div whileHover={{ scale: 1.02 }} className="border rounded-xl p-5 dark:border-zinc-700"><p className="font-semibold text-slate-800 dark:text-white mb-1">Ankit Puri </p><p className="text-sm text-slate-500 dark:text-zinc-400">Backend & API Development</p></motion.div>
           </div>
         </motion.div>
       </div>

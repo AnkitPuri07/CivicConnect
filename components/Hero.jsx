@@ -21,8 +21,8 @@ export default function Hero() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="flex flex-wrap justify-center lg:justify-start gap-4">
             <motion.a href="#FieldForComplaint" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-500/25">Get Started</motion.a>
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-              className="px-6 py-3 border border-slate-300 dark:border-zinc-600 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors font-medium text-slate-700 dark:text-zinc-300">Learn More</motion.button>
+            <motion.a href="/about" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 border border-slate-300 dark:border-zinc-600 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors font-medium text-slate-700 dark:text-zinc-300">Learn More</motion.a>
           </motion.div>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="hidden lg:block relative h-[450px]">
