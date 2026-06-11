@@ -289,3 +289,21 @@ section {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #52525b;
 }
+
+
+
+.navbar {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.dark .navbar {
+  background: rgba(15, 15, 18, 0.6);
+}
+
+.navbar-scrolled {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.dark .navbar-scrolled {
+  background: rgba(15, 15, 18, 0.85);
+}

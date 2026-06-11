@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const employees = [
   { id: 1, name: "Ramesh Adhikari", image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150", role: "Municipal Officer", currentComplaints: 5, rating: 4.2 },
-  { id: 2, name: "Sita Sharma", image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150", role: "Health Inspector", currentComplaints: 2, rating: 4.8 },
+  { id: 2, name: "Pratima Upreti", image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150", role: "Health Inspector", currentComplaints: 2, rating: 4.8 },
   { id: 3, name: "Bikash Thapa", image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=150", role: "Sanitation Supervisor", currentComplaints: 8, rating: 3.9 },
 ];
 
