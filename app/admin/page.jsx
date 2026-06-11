@@ -14,6 +14,10 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export default function AdminPage() {
   const router = useRouter();
+
+  const [mounted, setMounted] = useState(false);
+  const [adminToken, setAdminToken] = useState(null);
+
   const [complaints, setComplaints] = useState([]);
   const [staffList, setStaffList] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState("PENDING");
@@ -21,11 +25,23 @@ export default function AdminPage() {
   const [isLoadingStaff, setIsLoadingStaff] = useState(true);
   const [error, setError] = useState("");
 
-  const adminToken = typeof window !== "undefined" ? localStorage.getItem("admin_token") : null;
+  // Load token after hydration
+  useEffect(() => {
+    setMounted(true);
 
-  // Wrapped in useCallback to prevent redeclaration on every render pass
+    const token = localStorage.getItem("admin_token");
+
+    if (!token) {
+      router.push("/admin/login");
+      return;
+    }
+
+    setAdminToken(token);
+  }, [router]);
+
   const fetchComplaints = useCallback(async () => {
     if (!adminToken) return;
+
     setIsLoadingComplaints(true);
     setError("");
 
@@ -40,8 +56,8 @@ export default function AdminPage() {
       );
       setComplaints(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
-      setError("Failed to load complaints. Please try again.");
-      console.error("Fetch complaints error:", err);
+      console.error(err);
+      setError("Failed to load complaints.");
       setComplaints([]);
     } finally {
       setIsLoadingComplaints(false);
@@ -50,6 +66,7 @@ export default function AdminPage() {
 
   const fetchStaff = useCallback(async () => {
     if (!adminToken) return;
+
     setIsLoadingStaff(true);
 
     try {
@@ -58,29 +75,29 @@ export default function AdminPage() {
           Authorization: `Bearer ${adminToken}`,
         },
       });
+
       setStaffList(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
-      console.error("Fetch staff error:", err);
+      console.error(err);
       setStaffList([]);
     } finally {
       setIsLoadingStaff(false);
     }
   }, [adminToken]);
 
-  // Combined Lifecycle Synchronization Hook
+  // Fetch complaints whenever status changes
   useEffect(() => {
-    if (!adminToken) {
-      router.push("/admin/login");
-      return;
+    if (adminToken) {
+      fetchComplaints();
     }
+  }, [adminToken, selectedStatus, fetchComplaints]);
 
-    fetchComplaints();
-    
-    // Only fetch staff array once on component mount
-    if (staffList.length === 0 && isLoadingStaff) {
+  // Fetch staff once
+  useEffect(() => {
+    if (adminToken) {
       fetchStaff();
     }
-  }, [adminToken, selectedStatus, router, fetchComplaints, fetchStaff, staffList.length, isLoadingStaff]);
+  }, [adminToken, fetchStaff]);
 
   const handleStatusUpdate = (complaintId, newStatus) => {
     setComplaints((prev) =>
@@ -104,17 +121,29 @@ export default function AdminPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
-    // Wipe auth headers clean upon exit
+    setAdminToken(null);
+
     delete axios.defaults.headers.common["Authorization"];
+
     router.push("/");
   };
 
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  // Waiting for redirect
   if (!adminToken) {
     return null;
   }
 
   return (
-    <div className="min-h-screen pt-28 pb-16 px-4">
+     <div className="min-h-screen pt-28 pb-16 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Dashboard Header Layout */}
         <motion.div
@@ -133,7 +162,7 @@ export default function AdminPage() {
           </div>
           <motion.button
             whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+           whileTap={{ scale: 0.98 }}
             onClick={handleLogout}
             className="btn-secondary flex items-center gap-2 py-2.5"
           >
@@ -141,12 +170,10 @@ export default function AdminPage() {
             Logout
           </motion.button>
         </motion.div>
-
         {/* Global Error Notice Overlay */}
         <AnimatePresence>
           {error && <ErrorBanner message={error} onRetry={fetchComplaints} />}
         </AnimatePresence>
-
         {/* Unified Custom Select Filter Input */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -168,7 +195,6 @@ export default function AdminPage() {
             <option value="RESOLVED">RESOLVED</option>
           </select>
         </motion.div>
-
         {/* Complaints Grid Area */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -179,9 +205,8 @@ export default function AdminPage() {
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
             Complaints ({selectedStatus})
           </h2>
-
           {isLoadingComplaints ? (
-            <SkeletonGrid count={3} />
+           <SkeletonGrid count={3} />
           ) : complaints.length === 0 ? (
             <div className="card p-12 text-center">
               <p className="text-slate-600 dark:text-zinc-400">
@@ -212,9 +237,8 @@ export default function AdminPage() {
             </div>
           )}
         </motion.div>
-
-        {/* Staff Management Roster Layout */}
-        <motion.div
+      {/* Staff Management Roster Layout */}
+      <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
@@ -222,7 +246,6 @@ export default function AdminPage() {
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
             Staff Members
           </h2>
-
           {isLoadingStaff ? (
             <SkeletonGrid count={3} />
           ) : staffList.length === 0 ? (
@@ -234,19 +257,19 @@ export default function AdminPage() {
               <AnimatePresence>
                 {staffList.map((staff, index) => (
                   <motion.div
-                    key={staff.id}
+                   key={staff.id}
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                   >
                     <EmployeeDetails
-                      id={staff.id}
+                    id={staff.id}
                       name={staff.name}
                       email={staff.email}
-                      department={staff.department}
+                     department={staff.department}
                     />
                   </motion.div>
-                ))}
+               ))}
               </AnimatePresence>
             </div>
           )}
