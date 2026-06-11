@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 const employees = [
   { id: 1, name: "Ramesh Adhikari", image: "/aayush.jpg", role: "Municipal Officer", currentComplaints: 5, rating: 4.2 },
-  { id: 2, name: "Sita Sharma", image: "/sahaj.jpg", role: "Health Inspector", currentComplaints: 2, rating: 4.8 },
-  { id: 3, name: "Bikash Thapa", image: "/arbin.jpg", role: "Sanitation Supervisor", currentComplaints: 8, rating: 3.9 },
+  { id: 2, name: "Sita Sharma", image: "/Sahaj.jpg", role: "Health Inspector", currentComplaints: 2, rating: 4.8 },
+  { id: 3, name: "Bikash Thapa", image: "/Arbin.jpg", role: "Sanitation Supervisor", currentComplaints: 8, rating: 3.9 },
 ];
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.15 } } };
